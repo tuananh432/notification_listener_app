@@ -29,7 +29,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_foreground_task: ^3.5.5
+  flutter_foreground_task: ^6.0.0+1
   notification_listener_service: ^0.0.3
   flutter_accessibility_service: ^0.0.1
   

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:isolate';
 
 import 'package:flutter/material.dart';
@@ -24,12 +23,11 @@ class _HomePageState extends State<HomePage> {
   ReceivePort? _receivePort;
 
   Future<void> _initForegroundTask() async {
-    await FlutterForegroundTask.init(
+    FlutterForegroundTask.init(
       androidNotificationOptions: AndroidNotificationOptions(
         channelId: 'notification_channel_id',
         channelName: 'Foreground Notification',
-        channelDescription:
-            'This notification appears when the foreground service is running.',
+        channelDescription: 'This notification appears when the foreground service is running.',
         channelImportance: NotificationChannelImportance.LOW,
         priority: NotificationPriority.LOW,
         iconData: const NotificationIconData(
@@ -51,7 +49,6 @@ class _HomePageState extends State<HomePage> {
         autoRunOnBoot: true,
         allowWifiLock: true,
       ),
-      printDevLog: true,
     );
   }
 
@@ -59,34 +56,15 @@ class _HomePageState extends State<HomePage> {
     // You can save data using the saveData function.
     await FlutterForegroundTask.saveData(key: 'customData', value: 'hello');
 
-    ReceivePort? receivePort;
     if (await FlutterForegroundTask.isRunningService) {
-      receivePort = await FlutterForegroundTask.restartService();
+      return FlutterForegroundTask.restartService();
     } else {
-      receivePort = await FlutterForegroundTask.startService(
+      return FlutterForegroundTask.startService(
         notificationTitle: 'Foreground Service is running',
         notificationText: 'Tap to return to the app',
         callback: startCallback,
       );
     }
-
-    if (receivePort != null) {
-      _receivePort = receivePort;
-      _receivePort?.listen((message) {
-        log("$message");
-
-        log("message recieved: $message");
-        if (message is DateTime) {
-          log('receive timestamp: $message');
-        } else if (message is int) {
-          log('receive updateCount: $message');
-        }
-      });
-
-      return true;
-    }
-
-    return false;
   }
 
   Future<bool> _stopForegroundTask() async {
@@ -141,7 +119,7 @@ class _HomePageState extends State<HomePage> {
       child: ElevatedButton(
         child: Text(text),
         onPressed: onPressed,
-        style: ElevatedButton.styleFrom(primary: const Color(0xFF587C8F)),
+        style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF587C8F)),
       ),
     );
   }

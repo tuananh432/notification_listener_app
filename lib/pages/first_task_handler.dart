@@ -15,19 +15,21 @@ class FirstTaskHandler extends TaskHandler {
   Future<void> onStart(DateTime timestamp, SendPort? sendPort) async {
     NotificationListenerService.notificationsStream.listen((event) {
       log("Current notification: $event");
+      log(event.hasExtrasPicture.toString());
     });
   }
 
-  @override
   Future<void> onEvent(DateTime timestamp, SendPort? sendPort) async {}
 
   @override
-  Future<void> onDestroy(DateTime timestamp) async {
+  Future<void> onDestroy(DateTime timestamp, SendPort? sendPort) async {
     await FlutterForegroundTask.clearAllData();
   }
 
-  @override
   void onButtonPressed(String id) {
     log('onButtonPressed >> $id -- $updateCount');
   }
+
+  @override
+  Future<void> onRepeatEvent(DateTime timestamp, SendPort? sendPort) async {}
 }
